@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مبتكر | نظام الفواتير والحسابات</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Rakkas&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
     <button class="tab-btn" data-view="expenses">المصاريف</button>
     <button class="tab-btn" data-view="labels">ملصقات الشحن</button>
   </div>
-  <div class="sync-indicator"><span class="dot" id="syncDot"></span><span id="syncText">متصل ومتزامن</span><span style="opacity:.5;margin-right:8px;">v4</span></div>
+  <div class="sync-indicator"><span class="dot" id="syncDot"></span><span id="syncText">متصل ومتزامن</span><span style="opacity:.5;margin-right:8px;">v5</span></div>
 </div>
 
 <div class="container">
@@ -100,6 +100,7 @@
           <div class="meta-item">
             <label>طريقة التوصيل</label>
             <select class="inv-field" id="deliveryType">
+              <option value="" selected>— بدون توصيل (استلام شخصي) —</option>
               <option value="home">🏠 توصيل للمنزل</option>
               <option value="office">🏢 توصيل للمكتب</option>
             </select>
@@ -146,10 +147,10 @@
               <label>الشحن (اختياري)</label>
               <input type="number" id="shipping" placeholder="0" min="0" oninput="App.calc()">
             </div>
-            <label class="free-ship-row">
-              <input type="checkbox" id="freeShipping" onchange="App.toggleFreeShipping()">
-              <span>🚚 شحن مجاني</span>
-            </label>
+            <div class="ship-payer-toggle" id="shippingPayerWrap" style="display:none;">
+              <button type="button" class="ship-payer-btn" data-payer="customer" onclick="App.setShippingPayer('customer')">💵 يُدفع عند الاستلام</button>
+              <button type="button" class="ship-payer-btn" data-payer="store" onclick="App.setShippingPayer('store')">🏪 المتجر يتحمّله</button>
+            </div>
             <div class="total-pill"><label>الإجمالي</label><span class="val" id="grandTotal">0.000 ر.ع</span></div>
           </div>
         </div>
@@ -212,6 +213,6 @@
 
 </div>
 
-<script type="module" src="app.js?v=4"></script>
+<script type="module" src="app.js?v=5"></script>
 </body>
 </html>
