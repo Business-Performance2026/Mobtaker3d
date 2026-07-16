@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مبتكر | نظام الفواتير والحسابات</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Rakkas&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">🖨️ مبتكر — نظام الفواتير</div>
+  <div class="tabs">
+    <button class="tab-btn active" data-view="dashboard">لوحة التحكم</button>
+    <button class="tab-btn" data-view="invoice">فاتورة جديدة</button>
+    <button class="tab-btn" data-view="invoices-list">الفواتير</button>
+    <button class="tab-btn" data-view="expenses">المصاريف</button>
+  </div>
+  <div class="sync-indicator"><span class="dot" id="syncDot"></span><span id="syncText">متصل ومتزامن</span></div>
+</div>
+
+<div class="container">
+
+  <!-- ===================== لوحة التحكم / التقارير ===================== -->
+  <div class="view active" id="view-dashboard">
+    <div class="section-title">📊 اليوم</div>
+    <div class="stat-grid" id="statsToday"></div>
+
+    <div class="section-title">📅 هذا الأسبوع</div>
+    <div class="stat-grid" id="statsWeek"></div>
+
+    <div class="section-title">🗓️ هذا الشهر</div>
+    <div class="stat-grid" id="statsMonth"></div>
+  </div>
+
+  <!-- ===================== فاتورة جديدة ===================== -->
+  <div class="view" id="view-invoice">
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="App.saveInvoice()">💾 حفظ الفاتورة</button>
+      <button class="btn btn-outline" onclick="window.print()">🖨️ طباعة / PDF</button>
+      <button class="btn btn-outline" onclick="App.newInvoice()">＋ فاتورة فارغة</button>
+      <button class="btn btn-outline" onclick="document.getElementById('logoInput').click()">🖼️ تغيير الشعار</button>
+    </div>
+
+    <div class="sheet" id="sheet">
+      <div class="diag"></div>
+      <div class="watermark" id="watermark"></div>
+
+      <div class="content">
+        <div class="head">
+          <div class="logo-box" title="اضغط لرفع الشعار">
+            <img id="logoImg" style="display:none;">
+            <div class="hint" id="logoHint">اضغط لإضافة<br>الشعار</div>
+            <input type="file" id="logoInput" accept="image/*">
+          </div>
+          <div class="contact">
+            <div class="row">
+              <span>90999815</span>
+              <span class="icon-circle">
+                <svg viewBox="0 0 32 32" fill="#25D366"><path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.386.693 4.611 1.887 6.484L4 29l7.716-1.858A11.94 11.94 0 0016.001 27C22.63 27 28 21.627 28 15S22.63 3 16.001 3zm0 21.75c-1.988 0-3.847-.573-5.414-1.561l-.388-.24-4.578 1.102 1.127-4.464-.253-.402A9.71 9.71 0 016.25 15c0-5.376 4.375-9.75 9.751-9.75S25.75 9.624 25.75 15 21.377 24.75 16.001 24.75zm5.35-7.28c-.293-.147-1.735-.857-2.004-.955-.269-.098-.465-.147-.66.147-.196.293-.758.955-.929 1.15-.171.196-.342.22-.635.073-.293-.147-1.235-.455-2.353-1.452-.87-.775-1.457-1.733-1.628-2.026-.171-.293-.018-.452.129-.598.132-.132.293-.342.44-.513.147-.171.196-.293.293-.489.098-.196.049-.367-.024-.513-.073-.147-.66-1.59-.904-2.178-.238-.572-.48-.494-.66-.503l-.562-.01c-.196 0-.513.073-.782.367-.269.293-1.026 1.002-1.026 2.444s1.051 2.836 1.198 3.032c.147.196 2.07 3.16 5.017 4.432.701.303 1.248.484 1.674.62.703.223 1.343.192 1.849.117.564-.084 1.735-.709 1.98-1.394.244-.685.244-1.272.171-1.394-.073-.122-.269-.196-.562-.342z"/></svg>
+              </span>
+            </div>
+            <div class="row">
+              <span>mobtaker.om</span>
+              <span class="icon-circle">
+                <svg viewBox="0 0 448 512">
+                  <defs>
+                    <linearGradient id="igGrad" x1="0" y1="1" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#feda75"/>
+                      <stop offset="35%" stop-color="#d62976"/>
+                      <stop offset="70%" stop-color="#962fbf"/>
+                      <stop offset="100%" stop-color="#4f5bd5"/>
+                    </linearGradient>
+                  </defs>
+                  <path fill="url(#igGrad)" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="title-block"><h1>فاتورة</h1></div>
+
+        <div class="inv-card">
+          <div class="meta-grid">
+            <div class="meta-item"><label>اسم العميل</label><input class="inv-field" id="custName" placeholder="اسم العميل"></div>
+            <div class="meta-item"><label>المنطقة</label><input class="inv-field" id="custRegion" placeholder="المنطقة"></div>
+            <div class="meta-item"><label>الولاية</label><input class="inv-field" id="custState" placeholder="الولاية"></div>
+            <div class="full">
+              <div class="meta-item"><label>رقم الفاتورة</label><input class="inv-field inv-no" id="invNo" readonly></div>
+              <div class="meta-item"><label>التاريخ</label><input class="inv-field" id="invDate" type="date"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="items-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:38%">الصنف</th>
+              <th style="width:16%">السعر</th>
+              <th style="width:14%">الكمية</th>
+              <th style="width:20%">المجموع</th>
+              <th style="width:6%"></th>
+            </tr></thead>
+            <tbody id="itemsBody"></tbody>
+          </table>
+          <button class="add-row-btn" onclick="App.addRow()">＋ إضافة صنف</button>
+        </div>
+
+        <div class="summary-card">
+          <div class="srow"><label>المجموع الفرعي</label><span class="val" id="subtotalVal">0.000 ر.ع</span></div>
+          <div class="srow"><label>الخصم</label><input type="number" id="discount" placeholder="0" min="0" oninput="App.calc()"></div>
+          <div class="srow" style="border-bottom:none;"><label>الشحن (اختياري)</label><input type="number" id="shipping" placeholder="0" min="0" oninput="App.calc()"></div>
+        </div>
+        <div class="total-bar"><label>الإجمالي</label><span class="val" id="grandTotal">0.000 ر.ع</span></div>
+
+        <div class="inv-card notes-card">
+          <label>ملاحظات</label>
+          <textarea id="notes" placeholder="أي ملاحظات إضافية..."></textarea>
+        </div>
+
+        <div class="foot">شكراً لتعاملكم معنا 🌿</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== قائمة الفواتير ===================== -->
+  <div class="view" id="view-invoices-list">
+    <div class="section-title">📄 كل الفواتير</div>
+    <div class="card"><div id="invoicesList"><div class="empty">جارِ التحميل...</div></div></div>
+  </div>
+
+  <!-- ===================== المصاريف ===================== -->
+  <div class="view" id="view-expenses">
+    <div class="section-title">➖ إضافة مصروف</div>
+    <div class="card">
+      <div class="form-grid">
+        <div class="field-wrap"><label>الوصف</label><input class="field" id="expDesc" placeholder="مثال: خيوط طباعة PLA"></div>
+        <div class="field-wrap"><label>المبلغ (ر.ع)</label><input class="field" id="expAmount" type="number" min="0" step="0.001" placeholder="0.000"></div>
+        <div class="field-wrap"><label>التصنيف</label>
+          <select class="field" id="expCategory">
+            <option value="خامات">خامات (فيلامنت / راتنج)</option>
+            <option value="صيانة">صيانة الطابعة</option>
+            <option value="كهرباء">كهرباء</option>
+            <option value="تسويق">تسويق / إعلانات</option>
+            <option value="شحن">شحن</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+        </div>
+        <div class="field-wrap"><label>التاريخ</label><input class="field" id="expDate" type="date"></div>
+      </div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="App.saveExpense()">💾 حفظ المصروف</button></div>
+    </div>
+
+    <div class="section-title">📋 سجل المصاريف</div>
+    <div class="card"><div id="expensesList"><div class="empty">جارِ التحميل...</div></div></div>
+  </div>
+
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
